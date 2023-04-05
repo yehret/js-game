@@ -1,4 +1,5 @@
 import Boundary from './classes/Boundary.js';
+import Player from './classes/Player.js';
 const canvas = document.querySelector('canvas');
 // cc - canvas context
 export const cc = canvas.getContext('2d');
@@ -49,4 +50,28 @@ const boundaries = [
   ),
 ];
 
-boundaries.forEach((el) => el.draw());
+const player = new Player(70, 380, 30, 'aqua', { x: 0, y: 0 });
+player.draw();
+
+const movePlayer = (event) => {
+  const angle = Math.atan2(event.offsetY - player.y, event.offsetX - player.x);
+  const velocity = {
+    x: Math.cos(angle) * 2,
+    y: Math.sin(angle) * 2,
+  };
+  player.velocity = velocity;
+};
+
+function animate() {
+  requestAnimationFrame(animate);
+  cc.clearRect(0, 0, canvas.width, canvas.height);
+
+  //Drawing our objects
+  boundaries.forEach((el) => el.draw());
+  player.update();
+  // console.log('go');
+}
+
+window.addEventListener('click', movePlayer);
+
+animate();

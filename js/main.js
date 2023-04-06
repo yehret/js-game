@@ -52,26 +52,23 @@ const boundaries = [
   ),
 ];
 
-const player = new Player(71, 380, 30, 'aqua', { x: 0, y: 0 });
+const player = new Player(65, 380, 25, 'aqua', { x: 0, y: 0 });
 player.draw();
 
-const rect = new Rectangle({
-  position: {
-    x: 450,
-    y: 250,
-  },
-});
+let isReleased = false;
 
 const movePlayer = (event) => {
-  const angle = Math.atan2(event.offsetY - player.y, event.offsetX - player.x);
-  const velocity = {
-    x: Math.cos(angle) * 2,
-    y: Math.sin(angle) * 2,
-  };
-  player.velocity = velocity;
-};
+  if (!isReleased) {
+    const angle = Math.atan2(event.offsetY - player.y, event.offsetX - player.x);
+    const velocity = {
+      x: Math.cos(angle) * 8,
+      y: Math.sin(angle) * 8,
+    };
+    player.velocity = velocity;
+  }
 
-const stopPlayer = () => {};
+  isReleased = true;
+};
 
 function animate() {
   requestAnimationFrame(animate);
@@ -82,7 +79,10 @@ function animate() {
   player.update();
 
   boundaries.forEach((el) => {
-    if (RectCircleColliding(el, player)) player.velocity = { x: 0, y: 0 };
+    if (RectCircleColliding(el, player)) {
+      player.velocity = { x: 0, y: 0 };
+      isReleased = false;
+    }
   });
 }
 

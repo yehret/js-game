@@ -70,6 +70,16 @@ const movePlayer = (event) => {
   isReleased = true;
 };
 
+const whichWall = (player) => {
+  if (!isReleased) {
+    // console.log(player.x, player.y);
+    if (player.x <= 65 && player.y <= 740) return 'first';
+    if (player.x >= 65 && player.x <= 730 && player.y <= 70) return 'second';
+    if (player.x >= 730 && player.y > 60 && player.y < 730) return 'third';
+    if (player.x > 65 && player.x <= 740 && player.y >= 720 && player.y < 740) return 'fourth';
+  }
+};
+
 function animate() {
   requestAnimationFrame(animate);
   cc.clearRect(0, 0, canvas.width, canvas.height);
@@ -84,6 +94,10 @@ function animate() {
       isReleased = false;
     }
   });
+
+  whichWall(player);
+
+  // console.log(player.x, player.y);
 }
 
 window.addEventListener('click', movePlayer);
